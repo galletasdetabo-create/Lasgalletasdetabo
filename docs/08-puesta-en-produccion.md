@@ -70,10 +70,10 @@ El Worker crea solo los registros del dominio y de `www` al desplegarse. El domi
 
 ## 4. Activar servicios en la cuenta de Cloudflare
 
-1. **R2:** en Storage & databases, R2 object storage, activa el servicio. Puede pedir una tarjeta, aunque el uso de este sitio entra en la capa gratuita.
+1. **R2:** en Storage & databases, no hace falta: la caché usa KV, que no pide tarjeta.
 2. **Imágenes:** si el primer despliegue avisa de que Images no está habilitado, actívalo en Media, Images, Transformations.
 
-El bucket R2 y la base D1 se crean solos en el primer despliegue.
+El almacén KV y la base D1 se crean solos en el primer despliegue.
 
 ## 5. Variables de entorno
 
