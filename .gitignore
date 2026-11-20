@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Credenciales locales de desarrollo
+*.local.txt
+scripts/.marble-preview.jpg
+/test-results
+/playwright-report
+
+!.env.example
+/.auth

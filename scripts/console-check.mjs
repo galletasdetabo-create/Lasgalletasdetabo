@@ -1,0 +1,13 @@
+import { chromium } from "@playwright/test";
+const route = process.argv[2] ?? "/";
+const b = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" });
+const page = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+const logs = [];
+page.on("console", (m) => (m.type() === "error" || m.type() === "warning") && logs.push(`${m.type()}: ${m.text().slice(0, 600)}`));
+page.on("pageerror", (e) => logs.push("pageerror: " + e.message.slice(0, 600)));
+page.on("requestfailed", (r) => logs.push("requestfailed: " + r.url().slice(0, 120)));
+await page.goto("http://localhost:3000" + route, { waitUntil: "load" });
+await page.waitForTimeout(3000);
+console.log(logs.join("\n") || "sin errores");
+console.log("preloader:", await page.evaluate(() => document.querySelector(".preloader")?.className));
+await b.close();
