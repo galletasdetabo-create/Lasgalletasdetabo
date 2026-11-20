@@ -1,14 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { cacheLife, cacheTag } from "next/cache";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { getCatalog, getImage, getSettings } from "@/lib/data/public";
 import { instagramUrl, socialUrl, whatsappLink } from "@/lib/cms/settings";
 
 export async function SiteFooter() {
-  "use cache";
-  cacheTag("settings", "catalog", "media");
-  cacheLife("days");
   const [s, catalog] = await Promise.all([getSettings(), getCatalog()]);
   const logo = await getImage(s.brand.logo_id);
   const wa = s.whatsapp.enabled ? whatsappLink(s.whatsapp.number, s.whatsapp.default_message) : null;

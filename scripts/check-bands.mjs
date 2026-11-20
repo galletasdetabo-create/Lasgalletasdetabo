@@ -5,7 +5,7 @@ const out = process.argv[2] ?? ".";
 const width = Number(process.argv[3] ?? 1440);
 const browser = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" });
 const page = await browser.newPage({ viewport: { width, height: 900 } });
-await page.goto("http://localhost:3000/", { waitUntil: "networkidle" });
+await page.goto("http://localhost:7000/", { waitUntil: "networkidle" });
 await page.waitForTimeout(1500);
 
 const story = page.locator("section.story-band");

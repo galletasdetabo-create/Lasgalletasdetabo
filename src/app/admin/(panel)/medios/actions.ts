@@ -1,5 +1,5 @@
 "use server";
-import sharp from "sharp";
+import { inspectImage, stripJpegMetadata } from "@/lib/images";
 import { z } from "zod";
 import { logActivity, requireStaff } from "@/lib/auth";
 import { createSessionClient } from "@/lib/supabase/server";
@@ -8,7 +8,6 @@ import { refreshPublic } from "@/lib/admin/revalidate";
 import { slugify } from "@/lib/format";
 
 const MAX = 10 * 1024 * 1024;
-const RASTER = new Set(["jpeg", "png", "webp", "avif", "gif", "tiff"]);
 
 export interface MediaItem {
   id: string;
@@ -47,23 +46,14 @@ export async function mediaUsageAction(id: string) {
   return (data ?? []) as { kind: string; ref_id: string; label: string }[];
 }
 
-async function processImage(file: File, folder: string) {
+async function processImage(file: File, _folder: string) {
   if (file.size > MAX) throw new Error(`«${file.name}» supera 10 MB.`);
-  const input = Buffer.from(await file.arrayBuffer());
-  let meta;
-  try {
-    meta = await sharp(input, { animated: false }).metadata();
-  } catch (e) {
-    console.error("[medios] no se pudo leer la imagen:", e);
-    throw new Error(`«${file.name}» no es una imagen válida.`);
-  }
-  if (!meta.format || !RASTER.has(meta.format)) throw new Error(`«${file.name}»: formato no permitido (usa JPG, PNG, WebP o AVIF).`);
-  const keepPng = meta.format === "png" && folder === "marca";
-  const pipeline = sharp(input).rotate().resize({ width: 2400, height: 2400, fit: "inside", withoutEnlargement: true });
-  const buffer = keepPng ? await pipeline.png({ compressionLevel: 9 }).toBuffer() : await pipeline.webp({ quality: 82 }).toBuffer();
-  const out = await sharp(buffer).metadata();
-  const blur = `data:image/webp;base64,${(await sharp(buffer).resize(16, 16, { fit: "inside" }).webp({ quality: 40 }).toBuffer()).toString("base64")}`;
-  return { buffer, mime: keepPng ? "image/png" : "image/webp", ext: keepPng ? "png" : "webp", width: out.width ?? null, height: out.height ?? null, blur: keepPng ? null : blur };
+  const input = new Uint8Array(await file.arrayBuffer());
+  const info = inspectImage(input);
+  if (!info) throw new Error(`«${file.name}»: formato no permitido (usa JPG, PNG, WebP o AVIF).`);
+  // El tamaño de entrega lo ajusta el optimizador de imágenes; aquí solo se guarda el original sin metadatos.
+  const buffer = info.format === "jpeg" ? stripJpegMetadata(input) : input;
+  return { buffer, mime: info.mime, ext: info.ext, width: info.width, height: info.height, blur: null as string | null };
 }
 
 export async function uploadMediaAction(form: FormData): Promise<{ ok: boolean; error?: string; ids?: string[] }> {

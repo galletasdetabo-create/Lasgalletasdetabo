@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 const b = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" });
 const page = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
-await page.goto("http://localhost:3000/", { waitUntil: "load" });
+await page.goto("http://localhost:7000/", { waitUntil: "load" });
 await page.waitForTimeout(2500);
 console.log(JSON.stringify(await page.evaluate(() => {
   const g = (sel, props) => { const e = document.querySelector(sel); if (!e) return null; const s = getComputedStyle(e); return Object.fromEntries(props.map((p) => [p, s.getPropertyValue(p)])); };

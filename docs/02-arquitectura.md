@@ -4,10 +4,10 @@
 
 ```
 Navegador ──► Next.js 16 (App Router)
-               ├─ Páginas públicas: prerenderizadas (Cache Components) y revalidadas por etiquetas
+               ├─ Páginas públicas: prerenderizadas y revalidadas por etiquetas (unstable_cache + revalidateTag)
                ├─ Server Actions: checkout, CRM, formularios
                ├─ Route Handlers: /api/webhooks/mercadopago, /api/uploads/referencia, /api/events
-               └─ Proxy: refresca la sesión solo en /admin y /cuenta
+               └─ Cabecera noindex en /admin y /cuenta (next.config.ts)
                     │
                     ▼
               Supabase: Postgres + RLS · Auth · Storage (media pública, order-references privada)
@@ -25,7 +25,7 @@ Navegador ──► Next.js 16 (App Router)
 | `src/app/api` | Webhook de Mercado Pago, subida de referencias, métricas |
 | `src/components/sections` | Un componente por tipo de bloque del CMS |
 | `src/components/admin` | Editores del CRM (productos, secciones, medios, ajustes…) |
-| `src/lib/data/public.ts` | Lecturas públicas con `'use cache'` y etiquetas (`settings`, `media`, `catalog`, `sections`) |
+| `src/lib/data/public.ts` | Lecturas públicas con `unstable_cache` y etiquetas (`settings`, `media`, `catalog`, `sections`) |
 | `src/lib/cms` | Definición de secciones y de ajustes del sitio |
 | `src/lib/payments` | Cliente de Mercado Pago, firma de webhooks, estados y servicio de pagos |
 | `src/lib/checkout` | Validación, cotización autoritativa y medios de pago disponibles |
@@ -55,7 +55,7 @@ Estados de pago: pendiente, en proceso, aprobado, rechazado, cancelado, expirado
 
 - **RLS en todas las tablas**. El público solo lee el catálogo activo, los ajustes públicos y la versión publicada de las secciones; las columnas de borrador no se conceden a `anon`. Pedidos, clientes, pagos y registros solo los ve el equipo; un cliente con sesión solo ve sus propios pedidos.
 - **Permisos explícitos** con mínimo privilegio. Se revocan los permisos por defecto y se concede columna por columna donde aplica: un usuario solo puede editar su nombre y teléfono, nunca su rol.
-- **Roles**. El administrador tiene acceso total. El editor gestiona catálogo, pedidos, contenido y medios, sin acceso a pagos, WhatsApp, cupones, entregas ni usuarios. Cada página y acción del CRM verifica el rol en el servidor con `requireStaff` o `requireAdmin`; el proxy solo refresca la sesión.
+- **Roles**. El administrador tiene acceso total. El editor gestiona catálogo, pedidos, contenido y medios, sin acceso a pagos, WhatsApp, cupones, entregas ni usuarios. Cada página y acción del CRM verifica el rol en el servidor con `requireStaff` o `requireAdmin`; no hay proxy: el adaptador de Cloudflare no lo soporta bien y la comprobación ya vive en cada página y acción.
 - **Validación con Zod** en todas las acciones. El contenido de las secciones se depura contra su definición, eliminando campos desconocidos y enlaces `javascript:`.
 - **Archivos**. Las imágenes se validan por contenido real con sharp y se re-codifican, lo que elimina metadatos y cargas maliciosas; el SVG no se acepta. Las referencias de los clientes van a un bucket privado y el CRM las abre con enlaces firmados de 10 minutos.
 - **Webhooks**. Se verifica la firma HMAC-SHA256 con comparación en tiempo constante y tolerancia de 3 días, se deduplican por `x-request-id` y se consulta el recurso en la API antes de cambiar estados. También se comprueba que el monto y la referencia coincidan.
@@ -65,7 +65,7 @@ Estados de pago: pendiente, en proceso, aprobado, rechazado, cancelado, expirado
 
 ## Rendimiento
 
-- Las páginas públicas se prerenderizan en el shell estático (Cache Components) y se invalidan por etiqueta cuando el CRM guarda cambios, con `updateTag` y semántica de lectura tras escritura.
+- Las páginas públicas se prerenderizan y se invalidan por etiqueta cuando el CRM guarda cambios, con `revalidateTag(tag, { expire: 0 })` y `revalidatePath`.
 - **JavaScript mínimo**. La línea de los separadores usa CSS y un único IntersectionObserver; el parallax usa un solo detector de scroll con requestAnimationFrame. El mini-carrito con Motion se carga de forma diferida al abrirse por primera vez. El hero no usa preloader.
 - Las imágenes pasan por `next/image` con AVIF/WebP, `sizes` ajustados, placeholder difuminado y precarga solo de la imagen principal.
 - Las fuentes se sirven con `next/font` desde el mismo dominio; la pareja alternativa no se precarga.
@@ -88,3 +88,5 @@ Estados de pago: pendiente, en proceso, aprobado, rechazado, cancelado, expirado
 | Menú móvil | Acordeón con transición de altura de 0,5 s |
 | Mini-carrito | Motion: deslizamiento 0,6 s con elementos escalonados |
 | `prefers-reduced-motion` | Desactiva animaciones y muestra el contenido de inmediato |
+
+> **Sesiones sin proxy.** Sin un proxy que refresque el token, la sesión del CRM dura lo que dure el JWT de Supabase. En Supabase, Authentication, Sessions, JWT expiry, se recomienda 604800 segundos (7 días) para no tener que entrar de nuevo cada hora.

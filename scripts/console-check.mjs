@@ -6,7 +6,7 @@ const logs = [];
 page.on("console", (m) => (m.type() === "error" || m.type() === "warning") && logs.push(`${m.type()}: ${m.text().slice(0, 600)}`));
 page.on("pageerror", (e) => logs.push("pageerror: " + e.message.slice(0, 600)));
 page.on("requestfailed", (r) => logs.push("requestfailed: " + r.url().slice(0, 120)));
-await page.goto("http://localhost:3000" + route, { waitUntil: "load" });
+await page.goto("http://localhost:7000" + route, { waitUntil: "load" });
 await page.waitForTimeout(3000);
 console.log(logs.join("\n") || "sin errores");
 console.log("preloader:", await page.evaluate(() => document.querySelector(".preloader")?.className));

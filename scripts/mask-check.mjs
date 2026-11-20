@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 const b = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" });
 const page = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
-await page.goto("http://localhost:3000/", { waitUntil: "load" });
+await page.goto("http://localhost:7000/", { waitUntil: "load" });
 await page.waitForTimeout(3500);
 const info = await page.evaluate(() => { const e = document.querySelector(".hero-slide.is-active .hero-media"); const s = getComputedStyle(e); return { mask: s.maskImage, comp: s.maskComposite, wk: s.webkitMaskComposite, rect: JSON.stringify(e.getBoundingClientRect()), imgStyle: e.querySelector("img").getAttribute("style") }; });
 console.log(JSON.stringify(info, null, 1));

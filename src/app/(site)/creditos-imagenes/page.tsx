@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/server";
 import { toImageRef } from "@/lib/media";
 import type { Media } from "@/lib/types";
@@ -12,9 +11,6 @@ export const metadata: Metadata = {
 };
 
 async function getStockMedia() {
-  "use cache";
-  cacheTag("media");
-  cacheLife("max");
   const { data } = await createPublicClient().from("media").select("*").eq("is_stock", true).order("created_at");
   return (data ?? []) as Media[];
 }

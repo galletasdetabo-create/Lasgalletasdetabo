@@ -6,7 +6,7 @@ const b = await chromium.launch({ executablePath: "C:/Program Files/Google/Chrom
 const ctx = await b.newContext(w < 600 ? { ...devices["Pixel 7"] } : { viewport: { width: w, height: 900 } });
 for (const r of routes) {
   const page = await ctx.newPage();
-  await page.goto("http://localhost:3000" + r, { waitUntil: "load" });
+  await page.goto("http://localhost:7000" + r, { waitUntil: "load" });
   await page.waitForTimeout(2500);
   const h = await page.evaluate(() => document.body.scrollHeight);
   for (let y = 0; y < h; y += 500) { await page.evaluate((yy) => window.scrollTo(0, yy), y); await page.waitForTimeout(140); }

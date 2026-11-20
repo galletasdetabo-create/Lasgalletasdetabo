@@ -14,7 +14,7 @@ Tienda en línea de galletas personalizadas y alfajores artesanales, con carrito
 
 ## Tecnología
 
-Next.js 16 (App Router, Cache Components, Turbopack), React 19, TypeScript, Tailwind CSS 4, Supabase (Postgres, Auth, Storage, RLS), Motion (solo en el mini-carrito), Zod y sharp. Tipografías: Montserrat, Cormorant Garamond y Great Vibes.
+Next.js 16 (App Router, Turbopack) sobre Cloudflare Workers con OpenNext, React 19, TypeScript, Tailwind CSS 4, Supabase (Postgres, Auth, Storage, RLS), Motion (solo en el mini-carrito), Zod y sharp. Tipografías: Montserrat, Cormorant Garamond y Great Vibes.
 
 ## Puesta en marcha (local)
 
@@ -26,7 +26,7 @@ supabase start          # Supabase local en los puertos 574xx (ver supabase/conf
 cp .env.example .env.local   # completa las claves que imprime `supabase status`
 supabase db reset       # aplica las migraciones
 ADMIN_EMAIL=tu@correo.com ADMIN_PASSWORD='una-clave-larga' npm run seed
-npm run dev             # http://localhost:3000  ·  CRM: http://localhost:3000/admin
+npm run dev             # http://localhost:7000  ·  CRM: http://localhost:7000/admin
 ```
 
 Ejecuta la semilla sin `ADMIN_*` si no quieres crear un administrador. Para volver a cargar solo el contenido de la página de inicio: `node --env-file=.env.local scripts/reseed-home.mjs`.

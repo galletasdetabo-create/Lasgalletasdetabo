@@ -15,7 +15,7 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"]],
   use: {
-    baseURL: process.env.BASE_URL ?? "http://localhost:3000",
+    baseURL: process.env.BASE_URL ?? "http://localhost:7000",
     locale: "es-CO",
     timezoneId: "America/Bogota",
     trace: "retain-on-failure",

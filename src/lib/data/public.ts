@@ -1,5 +1,5 @@
 import "server-only";
-import { cacheLife, cacheTag } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/server";
 import { mergeSettings, type SiteSettings } from "@/lib/cms/settings";
 import { toImageRef } from "@/lib/media";
@@ -12,20 +12,14 @@ export const TAGS = {
   sections: "sections",
 } as const;
 
-export async function getSettings(): Promise<SiteSettings> {
-  "use cache";
-  cacheTag(TAGS.settings);
-  cacheLife("max");
+async function loadGetSettings(): Promise<SiteSettings> {
   const { data, error } = await createPublicClient().from("site_settings").select("key, value");
   if (error) throw new Error("No se pudieron cargar los ajustes: " + error.message);
   return mergeSettings(data ?? []);
 }
 
 /** Toda la biblioteca de medios indexada por id (la biblioteca es pequeña). */
-export async function getMediaIndex(): Promise<Record<string, ImageRef>> {
-  "use cache";
-  cacheTag(TAGS.media);
-  cacheLife("max");
+async function loadGetMediaIndex(): Promise<Record<string, ImageRef>> {
   const { data, error } = await createPublicClient().from("media").select("*");
   if (error) throw new Error("No se pudo cargar la biblioteca de medios: " + error.message);
   const index: Record<string, ImageRef> = {};
@@ -47,10 +41,7 @@ export interface Catalog {
   products: Product[];
 }
 
-export async function getCatalog(): Promise<Catalog> {
-  "use cache";
-  cacheTag(TAGS.catalog, TAGS.media);
-  cacheLife("max");
+async function loadGetCatalog(): Promise<Catalog> {
   const supabase = createPublicClient();
   const [cats, prods, imgs, vars, media] = await Promise.all([
     supabase.from("categories").select("*").eq("is_active", true).order("sort"),
@@ -104,19 +95,13 @@ export async function getCategoryBySlug(slug: string) {
   return categories.find((c) => c.slug === slug) ?? null;
 }
 
-export async function getDeliveryMethods(): Promise<DeliveryMethod[]> {
-  "use cache";
-  cacheTag(TAGS.catalog);
-  cacheLife("max");
+async function loadGetDeliveryMethods(): Promise<DeliveryMethod[]> {
   const { data, error } = await createPublicClient().from("delivery_methods").select("*").eq("is_active", true).order("sort");
   if (error) throw new Error(error.message);
   return (data ?? []) as DeliveryMethod[];
 }
 
-export async function getSections(page: string): Promise<Section[]> {
-  "use cache";
-  cacheTag(TAGS.sections, `sections:${page}`);
-  cacheLife("max");
+async function loadGetSections(page: string): Promise<Section[]> {
   const { data, error } = await createPublicClient()
     .from("page_sections")
     .select("id, page, type, label, variant, sort, is_enabled, content")
@@ -126,6 +111,14 @@ export async function getSections(page: string): Promise<Section[]> {
   if (error) throw new Error(error.message);
   return (data ?? []) as Section[];
 }
+
+/* Caché de datos públicos (R2 + etiquetas en Cloudflare). El CRM la invalida con revalidateTag. */
+const DAY = 86400;
+export const getSettings = unstable_cache(loadGetSettings, ["getSettings"], { tags: [TAGS.settings], revalidate: DAY });
+export const getMediaIndex = unstable_cache(loadGetMediaIndex, ["getMediaIndex"], { tags: [TAGS.media], revalidate: DAY });
+export const getCatalog = unstable_cache(loadGetCatalog, ["getCatalog"], { tags: [TAGS.catalog, TAGS.media], revalidate: DAY });
+export const getDeliveryMethods = unstable_cache(loadGetDeliveryMethods, ["getDeliveryMethods"], { tags: [TAGS.catalog], revalidate: DAY });
+export const getSections = unstable_cache(loadGetSections, ["getSections"], { tags: [TAGS.sections], revalidate: DAY });
 
 /** Precio mínimo mostrado ("desde"), considerando variantes activas. */
 export function priceFrom(p: Product) {

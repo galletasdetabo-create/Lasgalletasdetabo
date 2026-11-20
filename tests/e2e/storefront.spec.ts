@@ -24,7 +24,7 @@ test.describe("Tienda pública", () => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Las Galletas de Tabo/);
     expect(await page.locator('meta[name="description"]').getAttribute("content")).toBeTruthy();
-    expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toMatch(/^http:\/\/localhost:3000\/?$/);
+    expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toMatch(/^http:\/\/localhost:7000\/?$/);
     expect(await page.locator('meta[property="og:title"]').getAttribute("content")).toBeTruthy();
     expect(await page.locator("html").getAttribute("lang")).toBe("es-CO");
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();

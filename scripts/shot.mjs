@@ -3,7 +3,7 @@
 import { chromium } from "@playwright/test";
 
 const [out, width, ...paths] = process.argv.slice(2);
-const base = process.env.BASE_URL ?? "http://localhost:3000";
+const base = process.env.BASE_URL ?? "http://localhost:7000";
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH ?? "C:/Program Files/Google/Chrome/Application/chrome.exe" });
 const w = Number(width);
 const ctx = await browser.newContext({ viewport: { width: w, height: w < 600 ? 844 : 900 }, isMobile: w < 600, hasTouch: w < 600, deviceScaleFactor: 1 });

@@ -3,12 +3,12 @@
 // una página de "banco" para aprobar/rechazar y el envío de webhooks firmados (HMAC-SHA256).
 // No procesa dinero ni se conecta con Mercado Pago.
 //
-// Uso: SIM_PORT=4599 SIM_APP_URL=http://localhost:3000 SIM_SECRET=sim-secret node scripts/mp-simulator.mjs
+// Uso: SIM_PORT=4599 SIM_APP_URL=http://localhost:7000 SIM_SECRET=sim-secret node scripts/mp-simulator.mjs
 import http from "node:http";
 import { createHmac, randomUUID } from "node:crypto";
 
 const PORT = Number(process.env.SIM_PORT ?? 4599);
-const APP = process.env.SIM_APP_URL ?? "http://localhost:3000";
+const APP = process.env.SIM_APP_URL ?? "http://localhost:7000";
 const SECRET = process.env.SIM_SECRET ?? "sim-secret";
 const TOKEN = process.env.SIM_TOKEN ?? "TEST-simulador";
 const SELF = `http://127.0.0.1:${PORT}`;

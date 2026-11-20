@@ -48,3 +48,9 @@ scripts/.marble-preview.jpg
 
 !.env.example
 /.auth
+
+# Cloudflare
+/.open-next
+/.wrangler
+.dev.vars
+!.env.production
