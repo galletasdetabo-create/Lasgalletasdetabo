@@ -57,3 +57,4 @@ npm run test:e2e
 | [docs/05-pruebas-y-resultados.md](docs/05-pruebas-y-resultados.md) | Pruebas ejecutadas y resultados |
 | [docs/06-despliegue.md](docs/06-despliegue.md) | Despliegue a producción y lista de pendientes |
 | [docs/07-creditos-imagenes.md](docs/07-creditos-imagenes.md) | Fuente, autor y licencia de cada fotografía de stock |
+| [docs/08-puesta-en-produccion.md](docs/08-puesta-en-produccion.md) | Pasos para publicar en lasgalletasdetabo.com |
