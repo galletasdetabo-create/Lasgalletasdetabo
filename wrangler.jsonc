@@ -7,9 +7,5 @@
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "lasgalletasdetabo" }],
   "images": { "binding": "IMAGES" },
-  "routes": [
-    { "pattern": "lasgalletasdetabo.com", "custom_domain": true },
-    { "pattern": "www.lasgalletasdetabo.com", "custom_domain": true }
-  ],
   "observability": { "enabled": true }
 }
