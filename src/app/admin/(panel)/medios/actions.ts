@@ -46,7 +46,7 @@ export async function mediaUsageAction(id: string) {
   return (data ?? []) as { kind: string; ref_id: string; label: string }[];
 }
 
-async function processImage(file: File, _folder: string) {
+async function processImage(file: File) {
   if (file.size > MAX) throw new Error(`«${file.name}» supera 10 MB.`);
   const input = new Uint8Array(await file.arrayBuffer());
   const info = inspectImage(input);
@@ -66,7 +66,7 @@ export async function uploadMediaAction(form: FormData): Promise<{ ok: boolean; 
   const ids: string[] = [];
   for (const file of files) {
     try {
-      const img = await processImage(file, folder);
+      const img = await processImage(file);
       const base = slugify(file.name.replace(/\.[a-z0-9]+$/i, "")) || "imagen";
       const path = `${folder}/${base}-${crypto.randomUUID().slice(0, 8)}.${img.ext}`;
       const up = await db.storage.from("media").upload(path, img.buffer, { contentType: img.mime, cacheControl: "31536000" });
@@ -118,7 +118,7 @@ export async function replaceMediaAction(form: FormData) {
   const { data: m } = await db.from("media").select("path, folder").eq("id", id).single();
   if (!m) return { ok: false, error: "Imagen no encontrada." };
   try {
-    const img = await processImage(file, m.folder);
+    const img = await processImage(file);
     const path = `${m.folder}/${slugify(file.name.replace(/\.[a-z0-9]+$/i, "")) || "imagen"}-${crypto.randomUUID().slice(0, 8)}.${img.ext}`;
     const up = await db.storage.from("media").upload(path, img.buffer, { contentType: img.mime, cacheControl: "31536000" });
     if (up.error) throw new Error(up.error.message);

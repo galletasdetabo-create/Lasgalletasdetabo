@@ -43,12 +43,11 @@ function BurgerIcon({ open }: { open?: boolean }) {
 export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Props) {
   const { items, everOpened } = useCart();
   const [pathname, setPathname] = useState("");
-  const [scrollShow, setScrollShow] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sideOpen, setSideOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const lastY = useRef(0);
   const searchInput = useRef<HTMLInputElement>(null);
 
   // Al cambiar de ruta se cierran los paneles y el mini-carrito.
@@ -60,21 +59,14 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
     cart.close();
   }, []);
 
-  // Cabecera fija: entra al subir y se oculta al bajar.
+  // Cabecera siempre visible: transparente sobre la portada y blanca en cuanto se hace scroll.
   useEffect(() => {
     let raf = 0;
     const onScroll = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const up = y < lastY.current - 3;
-        const down = y > lastY.current + 3;
-        if (y < 200) setScrollShow(false);
-        else if (up) setScrollShow(true);
-        else if (down) setScrollShow(false);
-        lastY.current = y;
-      });
+      raf = requestAnimationFrame(() => setScrolled(window.scrollY > 24));
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -151,22 +143,11 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
         <div className="relative z-[65] bg-cream px-4 py-2 text-center font-sans text-[0.72rem] font-medium tracking-wide text-ink-soft">{notice}</div>
       ) : null}
 
-      <header className="header-main">
+      <header className="header-main" data-scrolled={scrolled}>
         <div className="flex h-full items-center justify-between" style={{ paddingInline: "var(--gutter)" }}>
           <span className="hidden lg:block">{renderLogo(logoH, true)}</span>
           <span className="lg:hidden">{renderLogo(46, false)}</span>
           <div className="flex h-full items-center gap-2 lg:gap-6">
-            {menu}
-            {tools}
-          </div>
-        </div>
-      </header>
-
-      {/* Cabecera fija (entra al subir) */}
-      <header className="header-sticky" data-show={scrollShow} aria-hidden={!scrollShow} inert={!scrollShow}>
-        <div className="flex h-full items-center justify-between" style={{ paddingInline: "var(--gutter)" }}>
-          {renderLogo(64, false)}
-          <div className="flex h-full items-center gap-6">
             {menu}
             {tools}
           </div>

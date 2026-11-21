@@ -10,16 +10,16 @@ export function homeSections(ids) {
   return [
     { type: "hero", label: "Portada", variant: "slider", content: {
       slides: [
-        { image: img("galletas-corazon-glaseado-rosa"), eyebrow: "Horneando con amor", title: "Galletas",
-          text: "Galletas decoradas a mano para cumpleaños, aniversarios y eventos. Cuéntanos tu idea y la convertimos en un detalle dulce.",
-          cta_primary_label: "Haz tu pedido", cta_primary_href: "/tienda", cta_secondary_label: "Personalizar", cta_secondary_href: "/tienda/galletas-personalizadas" },
-        { image: img("alfajor-dulce-de-leche-relleno"), eyebrow: "Suaves y generosos", title: "Alfajores",
-          text: "Tapas de maicena rellenas de dulce de leche, horneadas en pequeños lotes para que lleguen frescos a tu mesa.",
-          cta_primary_label: "Pedir alfajores", cta_primary_href: "/tienda/alfajores-artesanales", cta_secondary_label: "Ver tienda", cta_secondary_href: "/tienda" },
-        { image: img("caja-regalo-flores"), eyebrow: "Para regalar", title: "Regalos",
-          text: "Cajas con galletas y alfajores listas para sorprender, con tarjeta y la cinta del color que elijas.",
-          cta_primary_label: "Ver cajas", cta_primary_href: "/tienda/cajas-regalo", cta_secondary_label: "Haz tu pedido", cta_secondary_href: "/tienda" },
-      ].filter((s) => s.image) } },
+        { bg: img("hero-fondo-1"), image: img("hero-producto-1"), eyebrow: "Regalos que enamoran", title: "Alfajores artesanales",
+          text: "Cajas de alfajores rellenos de dulce de leche, con el lazo que elijas y listas para regalar.",
+          cta_primary_label: "Pedir alfajores", cta_primary_href: "/tienda/alfajores-artesanales" },
+        { bg: img("hero-fondo-2"), image: img("hero-producto-2"), eyebrow: "Amor en cada detalle", title: "Aniversarios inolvidables",
+          text: "Detalles dulces y personalizados para celebrar el amor y las fechas que merecen recordarse.",
+          cta_primary_label: "Crea tu detalle", cta_primary_href: "/tienda" },
+        { bg: img("hero-fondo-3"), image: img("hero-producto-3"), eyebrow: "Sorpresas que celebran", title: "Momentos especiales",
+          text: "Detalles únicos y personalizados para cumpleaños, aniversarios y fechas inolvidables.",
+          cta_primary_label: "Crea tu detalle", cta_primary_href: "/tienda/galletas-personalizadas" },
+      ].filter((s) => s.image && s.bg) } },
     { type: "story", label: "Historia de la marca (texto provisional)", variant: "default", content: {
       eyebrow: "hecho en casa", title: "Nuestra historia",
       text: "Las Galletas de Tabo nace en una cocina de casa, donde cada pedido se hornea y se decora a mano. Creemos que un detalle dulce puede hacer especial cualquier día, y por eso cuidamos cada galleta y cada alfajor como si fueran para nuestra propia familia.",

@@ -99,7 +99,7 @@ test.describe("Compra completa (transferencia)", () => {
     expect(cookie.unit_price).toBe(6000);
     expect(cookie.variant_name).toBe("Mediana · 8 cm");
     expect(cookie.customization.texto).toBe("Feliz día, Sofi");
-    expect(cookie.reference_image_path).toMatch(/^pendientes\/\d{4}-\d{2}\/.+\.webp$/);
+    expect(cookie.reference_image_path).toMatch(/^pendientes\/\d{4}-\d{2}\/.+\.(webp|png|jpg)$/);
     const { data: file } = await db().storage.from("order-references").download(cookie.reference_image_path);
     expect(file?.size).toBeGreaterThan(100);
     const { data: customer } = await db().from("customers").select("full_name").eq("email", email).single();

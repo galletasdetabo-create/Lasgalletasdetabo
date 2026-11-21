@@ -89,6 +89,13 @@ async function seedMedia() {
       credit: c ? { ...c, license: `${c.license} (recortada sin fondo)` } : undefined,
     });
   }
+  // Portada: fondos y productos recortados entregados por la marca
+  for (const [slug, alt] of [["hero-fondo-1", "Fondo crema con ramas secas de gypsophila y arándanos"], ["hero-fondo-2", "Fondo blanco liso para la portada"], ["hero-fondo-3", "Fondo de mármol claro con sombras de hojas"], ["hero-producto-1", "Siete cajas de alfajores con ventana y lazos de colores, con el sello de Las Galletas de Tabo"], ["hero-producto-2", "Tarta en forma de corazón con fresas, kiwi y mango y un globo rojo de Feliz Aniversario"], ["hero-producto-3", "Bandeja de cumpleaños con globos transparentes, bebidas, frutas y masa en letras"]]) {
+    ids[slug] = await upsertMedia({
+      file: path.join(MEDIA_DIR, `hero/${slug}.webp`), storagePath: `hero/${slug}.webp`, folder: "hero", alt, isStock: false,
+      credit: { source_name: "Proporcionada por el cliente", license: "Pendiente de confirmar por la marca" },
+    });
+  }
   // Identidad (archivos entregados por la marca)
   ids.logo = await upsertMedia({
     file: path.join(MEDIA_DIR, "brand/logo.png"), storagePath: "marca/logo-las-galletas-de-tabo.webp", folder: "marca",

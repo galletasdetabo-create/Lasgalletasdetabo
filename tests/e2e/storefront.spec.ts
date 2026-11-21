@@ -5,9 +5,9 @@ test.describe("Tienda pública", () => {
   test("la página de inicio muestra todas las secciones sin errores", async ({ page }) => {
     const errors = collectErrors(page);
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1, name: "Galletas" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Haz tu pedido" })).toBeVisible();
-    for (const h of ["Nuestra historia", "Dos dulces", "Productos destacados", "Galería", "Cómo pedir", "Alfajores artesanales", "Galletas personalizadas"]) {
+    await expect(page.getByRole("heading", { level: 1, name: "Alfajores artesanales" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Pedir alfajores" })).toBeVisible();
+    for (const h of ["Nuestra historia", "Dos dulces", "Productos destacados", "Galería", "Cómo pedir", "Pura delicia", "Tradición", "Galletas personalizadas"]) {
       await expect(page.getByRole("heading", { name: h }).first()).toBeAttached();
     }
     // Las imágenes cargan (ninguna rota)

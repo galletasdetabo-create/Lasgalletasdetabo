@@ -7,7 +7,7 @@ export const CartItemInput = z.object({
   customization: z.record(z.string().max(40), z.string().max(700)).default({}),
   reference_image_path: z
     .string()
-    .regex(/^pendientes\/\d{4}-\d{2}\/[0-9a-f-]{36}\.webp$/, "Ruta de imagen inválida")
+    .regex(/^pendientes\/\d{4}-\d{2}\/[0-9a-f-]{36}\.(?:webp|png|jpg)$/, "Ruta de imagen inválida")
     .nullable()
     .default(null),
 });

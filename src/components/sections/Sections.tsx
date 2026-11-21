@@ -54,7 +54,7 @@ function Hero({ s, ctx }: { s: Section; ctx: Ctx }) {
       { label: str(x, "cta_primary_label") || str(c, "cta_primary_label"), href: resolveHref(str(x, "cta_primary_href") || str(c, "cta_primary_href"), ctx) ?? "", kind: "solid" as const },
       { label: str(x, "cta_secondary_label") || str(c, "cta_secondary_label"), href: resolveHref(str(x, "cta_secondary_href") || str(c, "cta_secondary_href"), ctx) ?? "", kind: "outline" as const },
     ].filter((b) => b.label && b.href);
-    return { image: img(ctx, x.image), eyebrow: str(x, "eyebrow") || str(c, "eyebrow"), title: str(x, "title") || str(c, "title"), text: str(x, "text") || str(c, "subtitle"), ctas };
+    return { bg: img(ctx, x.bg), image: img(ctx, x.image), eyebrow: str(x, "eyebrow") || str(c, "eyebrow"), title: str(x, "title") || str(c, "title"), text: str(x, "text") || str(c, "subtitle"), ctas };
   };
   let slides = list(c, "slides").map(mk).filter((x) => x.title);
   if (!slides.length && str(c, "title")) slides = [mk({})];

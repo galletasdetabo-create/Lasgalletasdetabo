@@ -41,7 +41,8 @@ export const SECTION_DEFS: SectionDef[] = [
     variants: [{ value: "slider", label: "Carrusel a pantalla completa" }],
     fields: [
       { name: "slides", label: "Diapositivas", kind: "list", maxItems: 5, fields: [
-        { name: "image", label: "Imagen (se ve mejor con la parte izquierda llamativa)", kind: "image" },
+        { name: "bg", label: "Fondo (opcional, a pantalla completa, 1900 × 900 px)", kind: "image" },
+        { name: "image", label: "Imagen del producto (con fondo, recortada y sin fondo se coloca a la izquierda)", kind: "image" },
         { name: "eyebrow", label: "Subtítulo caligráfico", kind: "text" },
         { name: "title", label: "Título (una o dos palabras)", kind: "text" },
         { name: "text", label: "Texto", kind: "textarea" },

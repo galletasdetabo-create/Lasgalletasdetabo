@@ -18,7 +18,7 @@ test.describe("Seguridad", () => {
   });
 
   test("webhook: notificación repetida no se procesa dos veces (idempotencia)", async ({ request }) => {
-    const { data: orders } = await db().from("payments").select("provider_order_id").not("provider_order_id", "is", null).limit(1);
+    const { data: orders } = await db().from("payments").select("provider_order_id").not("provider_order_id", "is", null).order("created_at", { ascending: false }).limit(1);
     test.skip(!orders?.length, "Se necesita un pago PSE previo (ejecuta pse.spec.ts primero)");
     const id = orders![0].provider_order_id as string;
     const req = randomUUID();

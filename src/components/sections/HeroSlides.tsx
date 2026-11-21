@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import type { ImageRef } from "@/lib/types";
 
 export interface HeroSlide {
+  /** Fondo a pantalla completa (opcional). Con fondo, `image` es el producto recortado y se coloca a la izquierda. */
+  bg: ImageRef | null;
   image: ImageRef | null;
   eyebrow: string;
   title: string;
@@ -44,8 +46,18 @@ export function HeroSlides({ slides, interval = 7000 }: { slides: HeroSlide[]; i
         const Title = i === 0 ? "h1" : "p";
         const on = i === active;
         return (
-          <div key={i} className={`hero-slide ${on ? "is-active" : ""}`} aria-hidden={!on} inert={!on} role="group" aria-label={`Diapositiva ${i + 1} de ${count}`}>
-            {s.image ? (
+          <div key={i} className={`hero-slide ${on ? "is-active" : ""}${s.bg && s.image ? " has-product" : ""}`} aria-hidden={!on} inert={!on} role="group" aria-label={`Diapositiva ${i + 1} de ${count}`}>
+            {s.bg ? (
+              <div className="hero-bg">
+                <Image src={s.bg.url} alt="" fill sizes="100vw" preload={i === 0} fetchPriority={i === 0 ? "high" : "low"} loading={i === 0 ? "eager" : "lazy"} quality={i === 0 ? 78 : 70} className="object-cover" />
+              </div>
+            ) : null}
+            {s.bg && s.image ? (
+              <div className="hero-product">
+                <Image src={s.image.url} alt={i === 0 ? s.image.alt : s.image.alt} fill sizes="(min-width:1025px) 44vw, 90vw" quality={85} loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} className="object-contain" />
+              </div>
+            ) : null}
+            {!s.bg && s.image ? (
               <div className="hero-media">
                 <Image
                   src={s.image.url}

@@ -13,6 +13,12 @@ const items = [
   { file: "fondo-tradicion", alt: "Fondo de Tradición: vainilla, alfajores, galleta de corazón, cortador y rodillo, con línea de tiempo" },
 ];
 items.push(
+  { dir: "hero", file: "hero-fondo-1", alt: "Fondo crema con ramas secas de gypsophila y arándanos" },
+  { dir: "hero", file: "hero-fondo-2", alt: "Fondo blanco liso para la portada" },
+  { dir: "hero", file: "hero-fondo-3", alt: "Fondo de mármol claro con sombras de hojas" },
+  { dir: "hero", file: "hero-producto-1", alt: "Siete cajas de alfajores con ventana y lazos de colores, con el sello de Las Galletas de Tabo" },
+  { dir: "hero", file: "hero-producto-2", alt: "Tarta en forma de corazón con fresas, kiwi y mango y un globo rojo de Feliz Aniversario" },
+  { dir: "hero", file: "hero-producto-3", alt: "Bandeja de cumpleaños con globos transparentes, bebidas, frutas y masa en letras" },
   { dir: "recortes", file: "alfajor-recorte", alt: "Alfajor de maicena relleno de dulce de leche, recortado sin fondo", from: "alfajor-dulce-de-leche-corte.webp" },
   { dir: "recortes", file: "galleta-recorte", alt: "Galleta de corazón glaseada en rosa, recortada sin fondo", from: "corazones-de-azucar.webp" },
 );
