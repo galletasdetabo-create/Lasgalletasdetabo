@@ -4,7 +4,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Preguntas frecuentes",
-  description: "Resolvemos tus dudas sobre pedidos, tiempos de preparación, personalización, pagos y entregas de Las Galletas de Tabo.",
+  description: "Resolvemos tus dudas para que tu celebración salga perfecta: pedidos, tiempos de preparación, personalización, pagos y entregas.",
   alternates: { canonical: "/preguntas-frecuentes" },
 };
 

@@ -8,7 +8,7 @@ import { instagramUrl, whatsappLink } from "@/lib/cms/settings";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: "Escríbenos para pedidos especiales de galletas personalizadas y alfajores artesanales.",
+  description: "Cuéntanos tu celebración y te ayudamos a crear el detalle perfecto: pedidos especiales, ideas personalizadas y atención por WhatsApp.",
   alternates: { canonical: "/contacto" },
 };
 

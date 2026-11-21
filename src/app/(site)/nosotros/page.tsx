@@ -4,7 +4,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Nosotros",
-  description: "Conoce Las Galletas de Tabo: repostería artesanal hecha en casa, galletas personalizadas y alfajores preparados por encargo.",
+  description: "Conoce Las Galletas de Tabo: una cocina de casa donde cada cumpleaños, aniversario y momento especial se convierte en un detalle dulce hecho a mano.",
   alternates: { canonical: "/nosotros" },
 };
 

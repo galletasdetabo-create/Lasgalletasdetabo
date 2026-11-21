@@ -4,7 +4,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Tienda de galletas personalizadas y alfajores",
-  description: "Compra en línea galletas decoradas y personalizadas para cumpleaños, aniversarios y eventos, alfajores artesanales y cajas de regalo.",
+  description: "Encuentra el detalle ideal para celebrar: letras con frutas, galletas personalizadas, alfajores artesanales y cajas de regalo para cumpleaños, aniversarios y fechas especiales.",
   alternates: { canonical: "/tienda" },
 };
 

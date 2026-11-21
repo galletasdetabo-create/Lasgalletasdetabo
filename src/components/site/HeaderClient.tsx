@@ -49,10 +49,20 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
   const [searchOpen, setSearchOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  // "Inicio" estando ya en la portada: sube suavemente hasta arriba del todo.
+  const goHome = (e: React.MouseEvent) => {
+    if (window.location.pathname === "/" && !window.location.hash) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMenuOpen(false);
+    }
+  };
 
   // Al cambiar de ruta se cierran los paneles y el mini-carrito.
   const onPath = useCallback((p: string) => {
     setPathname(p);
+    // Cada cambio de página empieza arriba del todo (sin quedar a medio camino de una sección).
+    if (!window.location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     setMenuOpen(false);
     setSideOpen(false);
     setSearchOpen(false);
@@ -93,7 +103,7 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
   const logoH = 72;
 
   const renderLogo = (h: number, priority: boolean) => (
-    <Link href="/" className="relative z-10 flex shrink-0 items-center" aria-label={`${brandName} — inicio`}>
+    <Link href="/" onClick={goHome} className="relative z-10 flex shrink-0 items-center" aria-label={`${brandName} — inicio`}>
       <Image src={logo.url} alt={brandName} width={Math.round((logo.width / logo.height) * h)} height={h} preload={priority} className="w-auto" style={{ height: h }} sizes="100px" quality={85} />
     </Link>
   );
@@ -103,7 +113,7 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
       <ul className="flex h-full items-center">
         {nav.map((item) => (
           <li key={item.href} className="nav-item relative h-full">
-            <Link href={item.href} aria-current={isActive(item.href) ? "page" : undefined} className="nav-link">
+            <Link href={item.href} onClick={item.href === "/" ? goHome : undefined} aria-current={isActive(item.href) ? "page" : undefined} className="nav-link">
               {item.label}
             </Link>
             {item.children ? (
@@ -161,7 +171,7 @@ export function HeaderClient({ nav, brandName, slogan, logo, notice, side }: Pro
             {nav.map((item) => (
               <li key={item.href} className="border-b border-[#ebebeb] last:border-b-0">
                 <div className="flex items-center justify-between">
-                  <Link href={item.href} className={`block flex-1 py-3.5 font-sans text-[13px] font-medium uppercase tracking-[0.19em] ${isActive(item.href) ? "text-gold-ink" : "text-ink"}`}>
+                  <Link href={item.href} onClick={item.href === "/" ? goHome : undefined} className={`block flex-1 py-3.5 font-sans text-[13px] font-medium uppercase tracking-[0.19em] ${isActive(item.href) ? "text-gold-ink" : "text-ink"}`}>
                     {item.label}
                   </Link>
                   {item.children ? (
